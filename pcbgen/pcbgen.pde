@@ -5,7 +5,8 @@ color GOLD = color(228, 171, 41);
 
 void setup() {
 
-  size(1920, 1080);
+  //size(1920, 1080);
+  fullScreen();
   background(BACKGROUND_COLOR);
   stroke(GOLD);
   rectMode(CENTER);
@@ -14,8 +15,8 @@ void setup() {
 float strokeW = 20;
 
 void draw() {
-  delay(20);
-
+  background(BACKGROUND_COLOR);
+  for( int n = 0; n< 20; n++){
   strokeWeight(strokeW);
 
   //line(randomX(),randomY(),randomX(),randomY());
@@ -24,8 +25,9 @@ void draw() {
   strokeW--;
   if (strokeW < 0) {
     strokeW = 20;
-    background(BACKGROUND_COLOR);
-    delay(2000);
+    //background(BACKGROUND_COLOR);
+    //delay(2000);
+  }
   }
 }
 
