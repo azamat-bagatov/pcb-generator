@@ -2,6 +2,25 @@ color BACKGROUND_COLOR = color(29);
 color GREEN = color(50, 254, 128);
 color GOLD = color(228, 171, 41);
 
+int NUM_POINTS = 20;
+float[][] header_matrix = new float[NUM_POINTS][2];
+float headerStep = 20;
+
+void fillmatrix(){
+  int n = 0;
+  while (n < NUM_POINTS){
+    int len = (int) randomGaussian()*4;
+    float startX = randomX();
+    float startY = randomY();
+    for (int i = 0 ; i < len; i++){
+      header_matrix[n][0] = startX + i*headerStep;
+      header_matrix[n][1] = startY;
+      n++;
+      if(n > NUM_POINTS-1) return;
+    }
+  }
+  
+}
 
 void setup() {
 
@@ -10,11 +29,14 @@ void setup() {
   background(BACKGROUND_COLOR);
   stroke(GOLD);
   rectMode(CENTER);
+  fillmatrix();
+  smooth(8);
 }
 
 float strokeW = 20;
 
 void draw() {
+  delay(2000);
   background(BACKGROUND_COLOR);
   for( int n = 0; n< 20; n++){
   strokeWeight(strokeW);
@@ -33,21 +55,27 @@ void draw() {
 
 float traceX, traceY = 0;
 
+void random_point_from_matrix(){
+  int p = (int) random(0,NUM_POINTS);
+  traceX = header_matrix[p][0];
+  traceY = header_matrix[p][1];
+}
+
 void random_trace() {
   //startpoint
-  traceX = randomX();
-  traceY = randomY();
+  random_point_from_matrix();
+  
   float startX = traceX;
   float startY = traceY;
   boolean firstPass = true;
 
-  while ( chance(95) ) {
+  while ( chance(65) ) {
 
     line_random_45();
     if (firstPass) {
       pushStyle();
       noStroke();
-      fill(GOLD);
+      fill(GREEN);
       ellipse(startX, startY, strokeW*2, strokeW*2);
       fill(BACKGROUND_COLOR);
       ellipse(startX, startY, strokeW, strokeW);
