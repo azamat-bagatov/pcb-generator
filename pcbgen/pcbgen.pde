@@ -1,12 +1,26 @@
-color BACKGROUND_COLOR = color(29);
-color GREEN = color(50, 254, 128);
-color GOLD = color(228, 171, 41);
+import themidibus.*; //Import the library
+
+MidiBus myBus; // The MidiBus
+
+
+color BACKGROUND_COLOR = color(0); //color(29);
+color GREEN = color(255); //color(50, 254, 128);
+color GOLD = color(255); //color(228, 171, 41);
 
 int NUM_POINTS = 20;
+int SEGMENT_LEN_SCALE = 200;
+int ENDSTOP_CHANCE = 85;
 float[][] header_matrix = new float[NUM_POINTS][2];
-float headerStep = 20;
+float headerStep = 40;
 
-void fillmatrix(){
+void fill_matrix_center(){
+  for(int i = 0; i < NUM_POINTS; i++){
+    int stX = int(width - headerStep*NUM_POINTS)/2;
+    header_matrix[i][0] = stX + i*headerStep;
+    header_matrix[i][1] = height/2;
+  }
+}
+void fill_matrix(){
   int n = 0;
   while (n < NUM_POINTS){
     int len = (int) randomGaussian()*4;
@@ -29,19 +43,21 @@ void setup() {
   background(BACKGROUND_COLOR);
   stroke(GOLD);
   rectMode(CENTER);
-  fillmatrix();
+  fill_matrix_center();
   smooth(8);
+  
+  myBus = new MidiBus(this, "Akai MPD32", "Java Sound Synthesizer"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
+
 }
 
 float strokeW = 20;
 
 void draw() {
-  delay(2000);
+  //delay(2000);
   background(BACKGROUND_COLOR);
   for( int n = 0; n< 20; n++){
   strokeWeight(strokeW);
 
-  //line(randomX(),randomY(),randomX(),randomY());
   for ( int i = 0; i < (int) random(0, (22-strokeW)/2); i++) random_trace();
 
   strokeW--;
@@ -51,6 +67,17 @@ void draw() {
     //delay(2000);
   }
   }
+}
+
+void controllerChange(int channel, int number, int value) {
+  // Receive a controllerChange
+  println();
+  println("Controller Change:");
+  println("--------");
+  println("Channel:"+channel);
+  println("Number:"+number);
+  println("Value:"+value);
+  ENDSTOP_CHANCE = (int)map(value,0,127,0,100);
 }
 
 float traceX, traceY = 0;
@@ -69,7 +96,7 @@ void random_trace() {
   float startY = traceY;
   boolean firstPass = true;
 
-  while ( chance(65) ) {
+  while ( chance(ENDSTOP_CHANCE) ) {
 
     line_random_45();
     if (firstPass) {
@@ -99,13 +126,13 @@ boolean chance ( int percent) {
 
 
 void line_random_45() {
-  float len = randomGaussian()*100;
+  float len = randomGaussian()*SEGMENT_LEN_SCALE;
   float ang = random_45_angle();
 
   float xEnd = traceX+len*cos(ang);
   float yEnd = traceY+len*sin(ang);
 
-  println(" DIR: " + ang + " x:" + xEnd + " | y:" + yEnd);
+  //println(" DIR: " + ang + " x:" + xEnd + " | y:" + yEnd);
 
   line(traceX, traceY, xEnd, yEnd);
   traceX = xEnd;
