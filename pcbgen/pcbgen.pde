@@ -13,6 +13,7 @@ int ENDSTOP_CHANCE = 85;
 int DENSITY_FACTOR = 22;
 int ANGLE_FRAGMENTATION = 4;
 int FRAME_DELAY = 30;
+int MAX_STROKE_WIDTH = 20;
 
 float[][] header_matrix = new float[NUM_POINTS][2];
 float headerStep = 40;
@@ -54,7 +55,7 @@ void setup() {
 
 }
 
-float strokeW = 20;
+float strokeW =MAX_STROKE_WIDTH;
 
 void draw() {
   
@@ -66,7 +67,7 @@ void draw() {
 
   strokeW--;
   if (strokeW < 0) {
-    strokeW = 20;
+    strokeW = MAX_STROKE_WIDTH;
   }
   }
   delay(FRAME_DELAY);
@@ -121,7 +122,8 @@ void controllerChange(int channel, int number, int value) {
   else if (number == 13) SEGMENT_LEN_SCALE = (int)map(value,0,127,0,400);
   else if (number == 14) DENSITY_FACTOR = (int) map(value,0,127,10,50);
   else if (number == 15) ANGLE_FRAGMENTATION = (int) map(value,0,127,1,24);
-  else if (number == 16) FRAME_DELAY = (int) map(value,0,127,1,240);
+  else if (number == 17) FRAME_DELAY = (int) map(value,0,127,1,240);
+  else if (number == 16) MAX_STROKE_WIDTH = (int) map(value,0,127,1,100);
 }
 
 float traceX, traceY = 0;
