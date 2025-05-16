@@ -10,6 +10,9 @@ color GOLD = color(255); //color(228, 171, 41);
 int NUM_POINTS = 20;
 int SEGMENT_LEN_SCALE = 200;
 int ENDSTOP_CHANCE = 85;
+int DENSITY_FACTOR = 22;
+int ANGLE_FRAGMENTATION = 4;
+
 float[][] header_matrix = new float[NUM_POINTS][2];
 float headerStep = 40;
 
@@ -20,6 +23,7 @@ void fill_matrix_center(){
     header_matrix[i][1] = height/2;
   }
 }
+
 void fill_matrix(){
   int n = 0;
   while (n < NUM_POINTS){
@@ -32,8 +36,7 @@ void fill_matrix(){
       n++;
       if(n > NUM_POINTS-1) return;
     }
-  }
-  
+  } 
 }
 
 void setup() {
@@ -55,10 +58,10 @@ float strokeW = 20;
 void draw() {
   //delay(2000);
   background(BACKGROUND_COLOR);
-  for( int n = 0; n< 20; n++){
+  for( int n = 0; n < 20; n++){
   strokeWeight(strokeW);
 
-  for ( int i = 0; i < (int) random(0, (22-strokeW)/2); i++) random_trace();
+  for ( int i = 0; i < (int) random(0, (DENSITY_FACTOR-strokeW)/2); i++) random_trace();
 
   strokeW--;
   if (strokeW < 0) {
@@ -77,7 +80,11 @@ void controllerChange(int channel, int number, int value) {
   println("Channel:"+channel);
   println("Number:"+number);
   println("Value:"+value);
-  ENDSTOP_CHANCE = (int)map(value,0,127,0,100);
+  
+  if( number == 12) ENDSTOP_CHANCE = (int)map(value,0,127,0,100);
+  else if (number == 13) SEGMENT_LEN_SCALE = (int)map(value,0,127,0,400);
+  else if (number == 14) DENSITY_FACTOR = (int) map(value,0,127,10,50);
+  else if (number == 15) ANGLE_FRAGMENTATION = (int) map(value,0,127,1,24);
 }
 
 float traceX, traceY = 0;
@@ -141,7 +148,7 @@ void line_random_45() {
 
 float random_45_angle() {
   float randAng = random(0, TWO_PI);
-  return randAng - randAng%(PI/4);
+  return randAng - randAng%(PI/ANGLE_FRAGMENTATION);
 }
 
 void pline(float x, float y, float ang, float len) {
