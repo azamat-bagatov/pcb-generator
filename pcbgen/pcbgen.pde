@@ -7,11 +7,12 @@ color BACKGROUND_COLOR = color(0); //color(29);
 color GREEN = color(255); //color(50, 254, 128);
 color GOLD = color(255); //color(228, 171, 41);
 
-int NUM_POINTS = 20;
+int NUM_POINTS = 400;
 int SEGMENT_LEN_SCALE = 200;
 int ENDSTOP_CHANCE = 85;
 int DENSITY_FACTOR = 22;
 int ANGLE_FRAGMENTATION = 4;
+int FRAME_DELAY = 30;
 
 float[][] header_matrix = new float[NUM_POINTS][2];
 float headerStep = 40;
@@ -46,8 +47,8 @@ void setup() {
   background(BACKGROUND_COLOR);
   stroke(GOLD);
   rectMode(CENTER);
-  fill_matrix_center();
-  smooth(8);
+  //fill_matrix_center();
+  smooth(80);
   
   myBus = new MidiBus(this, "Akai MPD32", "Java Sound Synthesizer"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
 
@@ -56,7 +57,7 @@ void setup() {
 float strokeW = 20;
 
 void draw() {
-  //delay(2000);
+  
   background(BACKGROUND_COLOR);
   for( int n = 0; n < 20; n++){
   strokeWeight(strokeW);
@@ -66,9 +67,44 @@ void draw() {
   strokeW--;
   if (strokeW < 0) {
     strokeW = 20;
-    //background(BACKGROUND_COLOR);
-    //delay(2000);
   }
+  }
+  delay(FRAME_DELAY);
+}
+
+void keyPressed(){
+  if (key == 'c') clear_matrix();
+}
+
+void clear_matrix(){
+    for(int i = 0; i < NUM_POINTS; i++){
+    header_matrix[i][0] = 0;
+    header_matrix[i][1] = 0;
+  }
+}
+void dispose(){
+  myBus.dispose();
+  println("done");
+}
+
+//drawing thing
+int gx = int( mouseX - mouseX%headerStep);
+int gy = int( mouseY - mouseY%headerStep);
+int prevX = gx; int prevY = gy;
+int ind = 0;
+
+void mouseDragged(){
+   gx = int( mouseX - mouseX%headerStep);
+   gy = int( mouseY - mouseY%headerStep);
+    
+  
+  if(gx != prevX || gy != prevY) {
+  header_matrix[ind][0] = gx;
+  header_matrix[ind][1] = gy;
+  ind++;
+  if (ind > NUM_POINTS-1) ind = 0;
+  println(ind);
+  prevX = gx;  prevY = gy;
   }
 }
 
@@ -85,6 +121,7 @@ void controllerChange(int channel, int number, int value) {
   else if (number == 13) SEGMENT_LEN_SCALE = (int)map(value,0,127,0,400);
   else if (number == 14) DENSITY_FACTOR = (int) map(value,0,127,10,50);
   else if (number == 15) ANGLE_FRAGMENTATION = (int) map(value,0,127,1,24);
+  else if (number == 16) FRAME_DELAY = (int) map(value,0,127,1,240);
 }
 
 float traceX, traceY = 0;
@@ -98,7 +135,7 @@ void random_point_from_matrix(){
 void random_trace() {
   //startpoint
   random_point_from_matrix();
-  
+  if(traceX == 0) return;
   float startX = traceX;
   float startY = traceY;
   boolean firstPass = true;
