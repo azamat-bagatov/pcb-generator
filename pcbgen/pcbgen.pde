@@ -1,11 +1,17 @@
+PFont pcbFont;
+
 import themidibus.*; //Import the library
 
 MidiBus myBus; // The MidiBus
 
 
-color BACKGROUND_COLOR = color(0); //color(29);
-color GREEN = color(255); //color(50, 254, 128);
-color GOLD = color(255); //color(228, 171, 41);
+color BACKGROUND_COLOR = color(29);
+color GREEN = color(50, 254, 128);
+color GOLD = color(228, 171, 41);
+
+ArrayList <Trace> traces;
+
+
 
 void setup() {
 
@@ -13,14 +19,36 @@ void setup() {
   fullScreen();
   smooth(8);
   background(BACKGROUND_COLOR);
-  
+  pcbFont = createFont("OCR-a___.ttf", 32);
+  textMode(RIGHT);
+  textFont(pcbFont);
   myBus = new MidiBus(this, "Akai MPD32", "Java Sound Synthesizer"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
-
+  traces = new ArrayList<Trace>();
+  create_random_traces();
+    
 }
 
-void draw() {
-  //draw a line 
+void create_random_traces(){
+  traces.clear();
+  for (int i = 0; i<random(20,100); i++){
+    traces.add(new Trace());
+  }
+}
 
+long timer = millis();
+void draw() {
+  background(BACKGROUND_COLOR);
+  fill(GOLD);
+  text(millis(),5,25);
+  for (Trace t : traces) {
+    t.draw();
+  }
+  
+  //every 2 seconds update
+  if(millis() - timer > 2000){
+    timer = millis();
+    create_random_traces();
+  }
 }
 
 void keyPressed(){

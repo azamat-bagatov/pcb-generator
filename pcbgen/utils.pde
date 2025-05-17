@@ -1,19 +1,19 @@
 boolean chance ( int percent) {
   return random(100) < percent;
 }
-int  ANGLE_FRAGMENTATION = 4;
 
-float random_45_angle() {
+float random_fr_angle() {
   float randAng = random(0, TWO_PI);
+  
+  int ANGLE_FRAGMENTATION = 4;
   return randAng - randAng%(PI/ANGLE_FRAGMENTATION);
 }
 
-PVector pline(PVector p) {
-  float xEnd = x+len*cos(ang);
-  float yEnd = y+len*sin(ang);
-  line(x, y, xEnd, yEnd);
-  float[] coords = {xEnd,yEnd};
-  return coords;
+PVector pline(PVector p, float len, float ang) {
+  float xEnd = p.x+len*cos(ang);
+  float yEnd = p.y+len*sin(ang);
+
+  return new PVector(xEnd,yEnd);
 }
 
 float randomX() {
