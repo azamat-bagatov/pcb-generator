@@ -23,6 +23,16 @@ float randomX() {
 float randomY() {
   return random(0, height);
 }
+
+float randomXcentered() {
+  return width/2 - ((randomGaussian())*width/10);
+}
+
+float randomYcentered() {
+  return height/2 - ((randomGaussian())*height/10);
+}
+
+
 int NUM_POINTS = 200;
 float[][] header_matrix = new float[NUM_POINTS][2];
 float headerStep = 40;
