@@ -192,7 +192,7 @@ float random_45_angle() {
 
 void pline(float x, float y, float ang, float len) {
   float xEnd = x+len*cos(ang);
-  float yEnd = x+len*sin(ang);
+  float yEnd = y+len*sin(ang);
   line(x, y, xEnd, yEnd);
 }
 float randomX() {
