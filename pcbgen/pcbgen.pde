@@ -20,7 +20,7 @@ void setup() {
   smooth(8);
   background(BACKGROUND_COLOR);
   pcbFont = createFont("OCR-a___.ttf", 32);
-  textMode(RIGHT);
+  
   textFont(pcbFont);
   myBus = new MidiBus(this, "Akai MPD32", "Java Sound Synthesizer"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
   traces = new ArrayList<Trace>();
@@ -30,7 +30,7 @@ void setup() {
 
 void create_random_traces(){
   traces.clear();
-  for (int i = 0; i<random(20,100); i++){
+  for (int i = 0; i<random(10,40); i++){
     traces.add(new Trace());
   }
 }
@@ -38,14 +38,33 @@ void create_random_traces(){
 long timer = millis();
 void draw() {
   background(BACKGROUND_COLOR);
-  fill(GOLD);
-  text(millis(),5,25);
+  
+  float rectX = width/2 - width/10;
+  float rectY = height/2 - height/10;
+  float rectW = width/5;
+  float rectH = height/5;
+  
+  clip(rectX, rectY,rectW, rectH);
   for (Trace t : traces) {
     t.draw();
   }
+  noClip();
+  //draw frame
+  noFill();
+  stroke(GOLD);
+  strokeWeight(2);
+  rect(rectX, rectY,rectW, rectH);
+  rect(rectX-5, rectY-5,rectW+10, rectH+10);
+  
+  
+  fill(GREEN);
+  textAlign(RIGHT);
+  text(millis(),rectX+rectW - 5, rectY+rectH - 5);
+  
+  text("'ONECRU",rectX+rectW - 5, rectY + 25);
   
   //every 2 seconds update
-  if(millis() - timer > 2000){
+  if(millis() - timer > 1500){
     timer = millis();
     create_random_traces();
   }
