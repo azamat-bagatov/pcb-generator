@@ -2,11 +2,19 @@ boolean chance ( int percent) {
   return random(100) < percent;
 }
 
+float prev_ang_val = 0;
+
 float random_fr_angle() {
   float randAng = random(0, TWO_PI);
-  
   int ANGLE_FRAGMENTATION = 4;
-  return randAng - randAng%(PI/ANGLE_FRAGMENTATION);
+  
+  while(true){
+    randAng = random(0, TWO_PI);
+    randAng = randAng - randAng%(PI/ANGLE_FRAGMENTATION);
+    if( abs(randAng - prev_ang_val) > PI) break;
+  }
+  prev_ang_val = randAng;
+  return randAng;
 }
 
 PVector pline(PVector p, float len, float ang) {
