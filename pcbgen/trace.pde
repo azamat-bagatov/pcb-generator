@@ -1,6 +1,7 @@
 class Trace {
   ArrayList<PVector> points;
   float weight = 0;
+  float outline = 2;
   Trace() {
     points = new ArrayList<PVector>();
     createRandom();
@@ -22,18 +23,35 @@ class Trace {
   }
   
   void draw(){
+    
     fill(BACKGROUND_COLOR);
-    strokeWeight(10);
-    stroke(GOLD);
-    strokeWeight(weight);
+    
+    
     if(points.size() < 2) return;
     
     for(int i = 1; i < points.size(); i++){
       PVector p1 = points.get(i-1);
       PVector p2 = points.get(i);
+      
+      //stroke line
+      strokeWeight(weight+outline*2);
+      stroke(BACKGROUND_COLOR);
       line(p1.x, p1.y, p2.x, p2.y);
-      if(i == 1) ellipse(points.get(0).x, points.get(0).y, weight*2,weight*2);
+      
+      //trace line
+      strokeWeight(weight);
+      stroke(GOLD);
+      line(p1.x, p1.y, p2.x, p2.y);
+      if(i == 1) {
+        stroke(BACKGROUND_COLOR);
+        ellipse(points.get(0).x, points.get(0).y, weight*2+outline,weight*2+outline);
+        stroke(GOLD);
+        ellipse(points.get(0).x, points.get(0).y, weight*2,weight*2);
+      }
     }
+    stroke(BACKGROUND_COLOR);
+    ellipse(points.get(points.size()-1).x, points.get(points.size()-1).y, weight*2+outline,weight*2+outline);
+    stroke(GOLD);
     ellipse(points.get(points.size()-1).x, points.get(points.size()-1).y, weight*2,weight*2);
   }
 
