@@ -32,7 +32,7 @@ void setup() {
  
   rectMode(CENTER);
   rect(width/2,height/2, fieldW,fieldH);
-  for(int i = 0; i < 10; i++) traces.add(new Trace());
+  for(int i = 0; i < 25; i++) traces.add(new Trace());
   draw_grid();
 }
 

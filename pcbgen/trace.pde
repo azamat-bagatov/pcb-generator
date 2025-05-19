@@ -15,7 +15,7 @@ class Trace {
   float speed = 0.1;
   
   Trace() {
-    //points = new ArrayList<PVector>();
+    
     dir = new PVector();
     target = new PVector();
     point  = new PVector();
@@ -29,24 +29,22 @@ class Trace {
     Y = randomYgrid();
     point.x = X;
     point.y = Y;
+    println("//" +X+" "+Y);
     do {
       dir.x = (int)random(-1, 2);
       dir.y = (int)random(-1, 2);
     } while (dir.x == 0 && dir.y ==0 );
-    updTarget();
+    target.x = point.x + dir.x*GRID_STEP;
+    target.y = point.y + dir.y*GRID_STEP;
     drawEnd();
   }
 
   void update() {
     //move dot one pixel in a dir
     step = step + speed;
-    
-    println(point.x + " " + point.y + " --> " +target.x + " " + target.y);
-    println(step);
     X=lerp(point.x, target.x, step);
     Y=lerp(point.y, target.y, step);
-    println(X + " " + Y );
-   // println(dir.x + " " + dir.y); 
+    
     // if reached target
     if ( onTarget()) {
       println("----!");
@@ -54,7 +52,7 @@ class Trace {
       if ( chance(50) ) {
         randomDir();
         updTarget();
-        //println("---->");
+        println("---->");
         if ( chance( (int)outboundFactor() ) ) {
           drawEnd();
           reset();
@@ -72,6 +70,7 @@ class Trace {
           fill(BACKG);
           ellipse(X, Y, weight, weight);
   }
+  
   float outboundFactor(){
     //return 0;
     if( distanceToFieldEdge() > 0 ) return distanceToFieldEdge();
@@ -98,8 +97,9 @@ class Trace {
   void updTarget() {
     point.x = target.x;
     point.y = target.y;
-    target.x = point.x + dir.x*GRID_STEP;
-    target.y = point.y + dir.y*GRID_STEP;
+    target.x = target.x + dir.x*GRID_STEP;
+    target.y = target.y + dir.y*GRID_STEP;
+    println("XY" +X+" "+Y + " | POINT: " + point.x + " " + point.y + " | TARGET:" + target.x + " " + target.y );
     step = 0;
   }
 
