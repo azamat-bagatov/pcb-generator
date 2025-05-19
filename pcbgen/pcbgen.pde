@@ -5,28 +5,44 @@ import themidibus.*; //Import the library
 MidiBus myBus; // The MidiBus
 
 
-color BACKGROUND_COLOR = color(29);
-color GREEN = color(50, 254, 128);
+color BACKG = color(29);
 color GOLD = color(228, 171, 41);
+color GREEN = color(50, 254, 128);
 
 ArrayList <Trace> traces;
 String[] namelist = {"SCHEK", "NINECANS", "SYNESTETICA", "NTA", "HT", "SHUBENTEGA", "SYDORETS", "GELIOLIN", "VORON","716"}; 
-
+int fieldW,fieldH;
 
 void setup() {
 
   //size(1920, 1080);
   fullScreen();
   smooth(8);
-  background(BACKGROUND_COLOR);
+  background(BACKG);
   pcbFont = createFont("Montserrat-Medium.ttf", 32);
+  
+   fieldW = width*2/3;
+   fieldH = height*2/3;
   
   textFont(pcbFont);
   textSize(20);
   //myBus = new MidiBus(this, "Akai MPD32", "Java Sound Synthesizer"); // Create a new MidiBus with no input device and the default Java Sound Synthesizer as the output device.
   traces = new ArrayList<Trace>();
-  create_random_traces();
-  
+  fill(GOLD);
+ 
+  rectMode(CENTER);
+  rect(width/2,height/2, fieldW,fieldH);
+  for(int i = 0; i < 10; i++) traces.add(new Trace());
+  draw_grid();
+}
+
+boolean pause = true;
+void draw() {
+  if(pause) return;
+  for (Trace t : traces) {
+    t.draw();
+  }
+
 }
 
 void create_random_traces(){
@@ -36,81 +52,19 @@ void create_random_traces(){
   }
 }
 
-
-long timer = millis();
-long nametimer = millis();
-long wordstimer = millis();
-String displayName = "LOADING...";
-String randomWords = "XXXXXX...";
-
-void draw() {
-  background(BACKGROUND_COLOR);
+void draw_grid(){
+  stroke(BACKG);
+  int i = 0;
+  int j = 0;
   
-  
-  float rectW = width/4;
-  float rectH = height/4;
-  float rectX = width/2 - rectW/2;
-  float rectY = height/2 - rectH/2;
-  
-  
-  clip(rectX, rectY,rectW, rectH);
-  
-  for (Trace t : traces) {
-    t.draw();
+  while (i < width){
+    while(j < height){
+      point(i,j);
+      j+=GRID_STEP;
+    }
+    i+=GRID_STEP;
+    j = 0;
   }
-  noClip();
-  
-  
-  
-  //draw frame
-  noFill();
-  stroke(GOLD);
-  strokeWeight(2);
-  rect(rectX, rectY,rectW, rectH);
-  rect(rectX-5, rectY-5,rectW+10, rectH+10);
-  
-  //draw window bar
-  int barheight = 20;
-  stroke(GOLD);
-  strokeWeight(2);
-  fill(GOLD);
-  rect(rectX-5, rectY-barheight-5,rectW+10, barheight);
-  //draw rings
-  noStroke();
-  fill(BACKGROUND_COLOR);
-  int esz = barheight - 8;
-  for (int i = 0; i < 3; i++){
-    ellipse(rectX+rectW + esz - (esz+esz/2)*(i+1), rectY-barheight+6, esz, esz);
-  }
-  
-  
-  fill(GREEN);
-  textAlign(RIGHT);
-  text(millis(),rectX+rectW - 5, rectY+rectH - 5);
-  
-  text("'ONECRU",rectX+rectW-5, rectY + 20);
-  
-  textAlign(LEFT);
-  text(displayName,rectX+5, rectY + 20);
-  text(randomWords,rectX+5, rectY+rectH-5);
-  
-  //every x seconds update traces
-  if(millis() - timer > 1500){
-    timer = millis();
-    create_random_traces();
-  }
-  //every x seconds update text
-   if(millis() - nametimer > 750){
-    nametimer = millis();
-    displayName = random_out_of_list(namelist);
-  }
-  
-  //every x seconds update text
-   if(millis() - wordstimer > 375){
-    wordstimer = millis();
-    randomWords = "#" + randomString(12);
-  }
-  
 }
 
 String randomString(int len) {
@@ -125,7 +79,9 @@ String randomString(int len) {
   return result;
 }
 
+
 int prevInd = 0;
+
 String random_out_of_list(String[] list){
   int len = list.length;
   int ind = (int) random(0,len);
@@ -137,7 +93,7 @@ String random_out_of_list(String[] list){
 }
 
 void keyPressed(){
-  if (key == 'c') clear_matrix();
+  if(key == ' ') pause = !pause;
 }
 
 

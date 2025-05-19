@@ -25,11 +25,19 @@ PVector pline(PVector p, float len, float ang) {
 }
 
 float randomX() {
-  return random(0, width);
+  return random((width - fieldW)/2, width - (width - fieldW)/2 );
 }
 
 float randomY() {
-  return random(0, height);
+  return random((height - fieldH)/2, height - (height - fieldH)/2 );
+}
+
+int randomXgrid() {
+  return int (GRID_STEP*int(randomX())/GRID_STEP);
+}
+
+int randomYgrid() {
+  return  int( GRID_STEP*int(randomY())/GRID_STEP);
 }
 
 float randomXcentered() {
