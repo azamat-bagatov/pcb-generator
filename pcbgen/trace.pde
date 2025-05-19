@@ -29,7 +29,7 @@ class Trace {
     Y = randomYgrid();
     point.x = X;
     point.y = Y;
-    println("//" +X+" "+Y);
+    //println("//" +X+" "+Y);
     do {
       dir.x = (int)random(-1, 2);
       dir.y = (int)random(-1, 2);
@@ -99,7 +99,7 @@ class Trace {
     point.y = target.y;
     target.x = target.x + dir.x*GRID_STEP;
     target.y = target.y + dir.y*GRID_STEP;
-    println("XY" +X+" "+Y + " | POINT: " + point.x + " " + point.y + " | TARGET:" + target.x + " " + target.y );
+    //println("XY" +X+" "+Y + " | POINT: " + point.x + " " + point.y + " | TARGET:" + target.x + " " + target.y );
     step = 0;
   }
 

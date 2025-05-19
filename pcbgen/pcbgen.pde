@@ -5,8 +5,11 @@ import themidibus.*; //Import the library
 MidiBus myBus; // The MidiBus
 
 
-color BACKG = color(29);
-color GOLD = color(228, 171, 41);
+//color BACKG = color(29);
+//color GOLD = color(228, 171, 41);
+color BACKG = color(0);
+color GOLD = color(255);
+
 color GREEN = color(50, 254, 128);
 
 ArrayList <Trace> traces;
