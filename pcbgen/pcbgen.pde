@@ -19,7 +19,7 @@ void setup() {
   fullScreen();
   smooth(8);
   background(BACKGROUND_COLOR);
-  pcbFont = createFont("OCR-a___.ttf", 32);
+  pcbFont = createFont("Montserrat-Medium.ttf", 32);
   
   textFont(pcbFont);
   textSize(20);
@@ -88,10 +88,10 @@ void draw() {
   textAlign(RIGHT);
   text(millis(),rectX+rectW - 5, rectY+rectH - 5);
   
-  text("'ONECRU",rectX+rectW-5, rectY + 16);
+  text("'ONECRU",rectX+rectW-5, rectY + 20);
   
   textAlign(LEFT);
-  text(displayName,rectX+5, rectY + 16);
+  text(displayName,rectX+5, rectY + 20);
   text(randomWords,rectX+5, rectY+rectH-5);
   
   //every x seconds update traces
