@@ -1,4 +1,4 @@
-float TRACE_OUTLINE_W = 4;
+
 float GRID_STEP = 24;
 
 boolean isGridPoint(int X, int Y) {
@@ -12,7 +12,8 @@ class Trace {
   float X, Y;
   PVector point, dir, target;
   float step = 0;
-  float speed = 0.1;
+  float speed = 0.2;
+  float TRACE_OUTLINE_W = 0;
 
   Trace() {
 
@@ -20,6 +21,7 @@ class Trace {
     target = new PVector();
     point  = new PVector();
     reset();
+    TRACE_OUTLINE_W = weight/2;
   }
 
   void reset() {
@@ -48,7 +50,7 @@ class Trace {
     if ( onTarget()) {
       println("----!");
       drupd();
-      updTarget();
+      
       if ( chance(50) ) {
         randomDir();
         updTarget();
@@ -58,6 +60,7 @@ class Trace {
           reset();
         }
       }
+      else updTarget();
       return 1;
     }
     return 0;
@@ -66,7 +69,7 @@ class Trace {
   void drawEnd() {
     noStroke();
     fill(BACKG);
-    ellipse(X, Y, weight*2+TRACE_OUTLINE_W*2, weight*2+TRACE_OUTLINE_W*2);
+    ellipse(X, Y, weight*2+TRACE_OUTLINE_W*2+2, weight*2+TRACE_OUTLINE_W*2+2);
     fill(GOLD);
     ellipse(X, Y, weight*2, weight*2);
     fill(BACKG);
@@ -146,5 +149,20 @@ class Trace {
     strokeWeight(weight);
     stroke(GOLD);
     line(point.x, point.y, X, Y);
+    
+    
+    //noStroke();
+    //fill(BACKG);
+    //drawDirectionalHalfCircle(X,Y, weight+TRACE_OUTLINE_W*2, dir);
+    //fill(GOLD);
+    //ellipse(X,Y, weight, weight);
+
   }
+  void drawDirectionalHalfCircle(float x, float y, float d, PVector dir) {
+  float angle = atan2(dir.y, dir.x);  // direction in radians
+  float start = angle - HALF_PI;
+  float stop = angle + HALF_PI;
+
+  arc(x, y, d, d, start, stop, PIE);  // use PIE for filled half-circle
+}
 }
