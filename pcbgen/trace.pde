@@ -13,17 +13,16 @@ class Trace {
   PVector point, dir, target;
   float step = 0;
   float speed = 0.1;
-  
+
   Trace() {
-    
+
     dir = new PVector();
     target = new PVector();
     point  = new PVector();
     reset();
-    
   }
-  
-  void reset(){
+
+  void reset() {
     weight = random(4, 20);
     X = randomXgrid();
     Y = randomYgrid();
@@ -39,15 +38,16 @@ class Trace {
     drawEnd();
   }
 
-  void update() {
+  int update() {
     //move dot one pixel in a dir
     step = step + speed;
     X=lerp(point.x, target.x, step);
     Y=lerp(point.y, target.y, step);
-    
+
     // if reached target
     if ( onTarget()) {
       println("----!");
+      drupd();
       updTarget();
       if ( chance(50) ) {
         randomDir();
@@ -58,22 +58,24 @@ class Trace {
           reset();
         }
       }
+      return 1;
     }
+    return 0;
   }
-  
-  void drawEnd(){
+
+  void drawEnd() {
     noStroke();
-          fill(BACKG);
-          ellipse(X, Y, weight*2+TRACE_OUTLINE_W*2, weight*2+TRACE_OUTLINE_W*2);
-          fill(GOLD);
-          ellipse(X, Y, weight*2, weight*2);
-          fill(BACKG);
-          ellipse(X, Y, weight, weight);
+    fill(BACKG);
+    ellipse(X, Y, weight*2+TRACE_OUTLINE_W*2, weight*2+TRACE_OUTLINE_W*2);
+    fill(GOLD);
+    ellipse(X, Y, weight*2, weight*2);
+    fill(BACKG);
+    ellipse(X, Y, weight, weight);
   }
-  
-  float outboundFactor(){
+
+  float outboundFactor() {
     //return 0;
-    if( distanceToFieldEdge() > 0 ) return distanceToFieldEdge();
+    if ( distanceToFieldEdge() > 0 ) return distanceToFieldEdge();
     return 0;
   }
   float distanceToFieldEdge() {
@@ -108,22 +110,41 @@ class Trace {
     do {
       newX = (int)random(-2, 2);
       newY = (int)random(-2, 2);
-      //println("NEW>" + newX + " " + newY); 
-      //println("OLD>" + dir.x + " " + dir.y); 
+      //println("NEW>" + newX + " " + newY);
+      //println("OLD>" + dir.x + " " + dir.y);
     } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) );
-    //println(">>>>>" + newX + " " + newY); 
+    //println(">>>>>" + newX + " " + newY);
     dir.x = newX;
     dir.y = newY;
   }
 
+  float oldX = 0;
+  float oldY = 0;
+  float oldstX = 0;
+  float oldstY = 0;
+
+  void drupd() {
+    oldX = target.x;
+    oldY = target.y;
+    oldstX = point.x;
+    oldstY = point.y;
+  }
   void draw() {
+
+    //on grate step, record old line
     update();
+
+    //draw new black line
     strokeWeight(weight+TRACE_OUTLINE_W*2);
     stroke(BACKG);
-    line(point.x,point.y,X,Y);
-    
+    line(point.x, point.y, X, Y);
+    //draw old line
     strokeWeight(weight);
     stroke(GOLD);
-    line(point.x,point.y,X,Y);
+    line(oldstX, oldstY, oldX, oldY);
+    //draw new line
+    strokeWeight(weight);
+    stroke(GOLD);
+    line(point.x, point.y, X, Y);
   }
 }
