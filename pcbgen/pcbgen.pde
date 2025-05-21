@@ -5,9 +5,9 @@ import themidibus.*; //Import the library
 MidiBus myBus; // The MidiBus
 
 
-color BACKGROUND_COLOR = color(29);
+color BACKGROUND_COLOR = color(0); //color(29);
 color GREEN = color(50, 254, 128);
-color GOLD = color(228, 171, 41);
+color GOLD = color(255); //color(228, 171, 41);
 
 ArrayList <Trace> traces;
 String[] namelist = {"SCHEK", "NINECANS", "SYNESTETICA", "NTA", "HT", "SHUBENTEGA", "SYDORETS", "GELIOLIN", "VORON","716"}; 
