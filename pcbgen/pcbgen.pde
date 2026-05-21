@@ -75,17 +75,20 @@ void create_random_traces(){
 
 void draw_grid(){
   stroke(BACKG);
+  pushMatrix();
+  translate( (width-fieldW)/2 , (height-fieldH)/2 );
   int i = 0;
   int j = 0;
   
-  while (i < width){
-    while(j < height){
+  while (i < fieldW){
+    while(j < fieldH){
       point(i,j);
       j+=GRID_STEP;
     }
     i+=GRID_STEP;
     j = 0;
   }
+  popMatrix();
 }
 
 String randomString(int len) {

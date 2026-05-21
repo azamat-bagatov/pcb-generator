@@ -78,8 +78,8 @@ class Trace {
   }
   void terminate(){
     drawEnd();
-    reset();
-    //live = false; 
+    //reset();
+    live = false; 
     println( "END");
   }
   void drawEnd() {
@@ -143,7 +143,7 @@ class Trace {
       newX = (int)random(-2, 2);
       newY = (int)random(-2, 2);
 
-    } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) );
+    } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) || (newX < 0 ));
     dir.x = newX;
     dir.y = newY;
   }
