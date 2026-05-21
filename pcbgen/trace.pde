@@ -1,5 +1,7 @@
 
-float GRID_STEP = 24;
+
+
+
 
 boolean isGridPoint(int X, int Y) {
   if ( X % GRID_STEP == 0 && Y % GRID_STEP == 0) return true;
@@ -7,13 +9,13 @@ boolean isGridPoint(int X, int Y) {
 }
 
 class Trace {
-  //ArrayList<PVector> points;
   float weight = 0;
   float X, Y;
   PVector point, dir, target;
   float step = 0;
   float speed = 0.2;
   float TRACE_OUTLINE_W = 0;
+  boolean live = true;
 
   Trace() {
 
@@ -25,18 +27,24 @@ class Trace {
   }
 
   void reset() {
-    weight = random(4, 20);
+    weight = random(4, 12);
+    
+    do{
     X = randomXgrid();
     Y = randomYgrid();
+    } while ( is_occupied(X,Y)) ; //stupid loop, needs redoing
+    
     point.x = X;
     point.y = Y;
-    //println("//" +X+" "+Y);
+    
     do {
       dir.x = (int)random(-1, 2);
       dir.y = (int)random(-1, 2);
-    } while (dir.x == 0 && dir.y ==0 );
+    } while (dir.x == 0 && dir.y ==0 ); //stupid loop
+    
     target.x = point.x + dir.x*GRID_STEP;
     target.y = point.y + dir.y*GRID_STEP;
+    add_point(point.x, point.y);
     drawEnd();
   }
 
@@ -46,33 +54,39 @@ class Trace {
     X=lerp(point.x, target.x, step);
     Y=lerp(point.y, target.y, step);
 
-    // if reached target
+    // if reached target grid point
     if ( onTarget()) {
-      println("----!");
-      drupd();
+      add_point(target.x, target.y);
+      drupd();      //record old point and target
       
       if ( chance(50) ) {
-        randomDir();
-        updTarget();
-        println("---->");
+        //change direction
+          randomDir(); 
+          updTarget();  
+        //terminate if gets out of frame
         if ( chance( (int)outboundFactor() ) ) {
-          drawEnd();
-          reset();
+          terminate();
         }
+        
       }
+      
       else updTarget();
+     
       return 1;
     }
     return 0;
   }
-
+  void terminate(){
+    drawEnd();
+    reset();
+    //live = false; 
+    println( "END");
+  }
   void drawEnd() {
     noStroke();
     fill(BACKG);
-    ellipse(X, Y, weight*2+TRACE_OUTLINE_W*2+2, weight*2+TRACE_OUTLINE_W*2+2);
+    ellipse(X, Y, weight*3, weight*3); //+TRACE_OUTLINE_W*2+2
     fill(GOLD);
-    ellipse(X, Y, weight*2, weight*2);
-    fill(BACKG);
     ellipse(X, Y, weight, weight);
   }
 
@@ -100,12 +114,27 @@ class Trace {
   }
 
   void updTarget() {
+    step = 0;
     point.x = target.x;
     point.y = target.y;
-    target.x = target.x + dir.x*GRID_STEP;
-    target.y = target.y + dir.y*GRID_STEP;
-    //println("XY" +X+" "+Y + " | POINT: " + point.x + " " + point.y + " | TARGET:" + target.x + " " + target.y );
-    step = 0;
+    
+    target.x = point.x + dir.x*GRID_STEP;
+    target.y = point.y + dir.y*GRID_STEP;
+    
+    int i = 0;
+    while( is_occupied(target.x, target.y))  
+    {
+      i++;
+      randomDir();
+      target.x = point.x + dir.x*GRID_STEP;
+      target.y = point.y + dir.y*GRID_STEP;
+      if( i > 9 ) {
+        terminate();
+        break;
+      }
+    }
+    
+    
   }
 
   void randomDir() {
@@ -113,10 +142,8 @@ class Trace {
     do {
       newX = (int)random(-2, 2);
       newY = (int)random(-2, 2);
-      //println("NEW>" + newX + " " + newY);
-      //println("OLD>" + dir.x + " " + dir.y);
+
     } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) );
-    //println(">>>>>" + newX + " " + newY);
     dir.x = newX;
     dir.y = newY;
   }
@@ -136,33 +163,24 @@ class Trace {
 
     //on grate step, record old line
     update();
-
-    //draw new black line
-    strokeWeight(weight+TRACE_OUTLINE_W*2);
     stroke(BACKG);
+    strokeWeight(weight+TRACE_OUTLINE_W*2);
     line(point.x, point.y, X, Y);
-    //draw old line
-    strokeWeight(weight);
-    stroke(GOLD);
     line(oldstX, oldstY, oldX, oldY);
-    //draw new line
-    strokeWeight(weight);
-    stroke(GOLD);
-    line(point.x, point.y, X, Y);
+    //draw new black line
+    //strokeWeight(weight+TRACE_OUTLINE_W*2);
+    //stroke(BACKG);
+    //line(point.x, point.y, X, Y);
+    ////draw old line
+    //strokeWeight(weight);
+    //stroke(GOLD);
+    //line(oldstX, oldstY, oldX, oldY);
     
+    ////draw new line
+    //strokeWeight(weight);
+    //stroke(GOLD);
+    //line(point.x, point.y, X, Y);
     
-    //noStroke();
-    //fill(BACKG);
-    //drawDirectionalHalfCircle(X,Y, weight+TRACE_OUTLINE_W*2, dir);
-    //fill(GOLD);
-    //ellipse(X,Y, weight, weight);
 
   }
-  void drawDirectionalHalfCircle(float x, float y, float d, PVector dir) {
-  float angle = atan2(dir.y, dir.x);  // direction in radians
-  float start = angle - HALF_PI;
-  float stop = angle + HALF_PI;
-
-  arc(x, y, d, d, start, stop, PIE);  // use PIE for filled half-circle
-}
 }
