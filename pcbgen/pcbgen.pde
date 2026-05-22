@@ -10,12 +10,11 @@ color GREEN = color(50, 254, 128);
 ArrayList <Trace> traces;
 
 int fieldW,fieldH;
-float GRID_STEP = 24;
+float GRID_STEP = 12;
 
 HashMap<String, Boolean> occupiedGrid = new HashMap<String, Boolean>();
 
 String gridKey(float x, float y) {
-  
   int gx = round(x / GRID_STEP);
   int gy = round(y / GRID_STEP);
   println(" ADD x = " + x + " y = " + y + "gx = " + gx + "gy = "+gy);

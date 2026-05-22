@@ -27,7 +27,7 @@ class Trace {
   }
 
   void reset() {
-    weight = random(2, 6);
+    weight = 4;
     
     do{
     X = randomXgrid();
