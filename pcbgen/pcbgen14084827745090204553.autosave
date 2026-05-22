@@ -1,5 +1,6 @@
 PFont pcbFont;
 boolean NO_INTERCECTIONS = false;
+
 //color BACKG = color(29);
 //color GOLD = color(228, 171, 41);
 color BACKG = color(0);
@@ -22,15 +23,15 @@ String gridKey(float x, float y) {
 }
 
 void add_point(float x, float y) {
-  
   occupiedGrid.put(gridKey(x, y), true);
 }
 
 boolean is_occupied(float x, float y, float dirx, float diry) {
-  if(NO_INTERCECTIONS){
-    return false;
+    if( NO_INTERCECTIONS ){
+    return occupiedGrid.containsKey(gridKey(x, y)) || ( occupiedGrid.containsKey(gridKey(x - dirx*GRID_STEP, y)) && occupiedGrid.containsKey(gridKey(x, y - diry*GRID_STEP)) )  ;
   }
-  else return occupiedGrid.containsKey(gridKey(x, y));
+  else
+ return occupiedGrid.containsKey(gridKey(x, y));
 }
 
 void setup() {
@@ -56,7 +57,7 @@ void setup() {
 }
 
 void seed(){
-  for(int i = 0; i < 20; i++) traces.add(new Trace());
+  for(int i = 0; i < 50; i++) traces.add(new Trace());
 }
 
 boolean pause = true;

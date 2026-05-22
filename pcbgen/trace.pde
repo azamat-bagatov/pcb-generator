@@ -28,19 +28,19 @@ class Trace {
 
   void reset() {
     weight = 4;
-    
-    do{
-    X = randomXgrid();
-    Y = randomYgrid();
-    } while ( is_occupied(X,Y)) ; //stupid loop, needs redoing
-    
-    point.x = X;
-    point.y = Y;
-    
+       
     do {
       dir.x = (int)random(-1, 2);
       dir.y = (int)random(-1, 2);
     } while (dir.x == 0 && dir.y ==0 ); //stupid loop
+    
+        do{
+    X = randomXgrid();
+    Y = randomYgrid();
+    } while ( is_occupied(X,Y,dir.x, dir.y)) ; //stupid loop, needs redoing
+    
+    point.x = X;
+    point.y = Y;
     
     target.x = point.x + dir.x*GRID_STEP;
     target.y = point.y + dir.y*GRID_STEP;
@@ -122,7 +122,7 @@ class Trace {
     target.y = point.y + dir.y*GRID_STEP;
     
     int i = 0;
-    while( is_occupied(target.x, target.y))  
+    while( is_occupied(target.x, target.y, dir.x, dir.y))  
     {
       i++;
       randomDir();
