@@ -27,7 +27,7 @@ class Trace {
   }
 
   void reset() {
-    weight = random(4, 12);
+    weight = random(2, 6);
     
     do{
     X = randomXgrid();
@@ -143,7 +143,7 @@ class Trace {
       newX = (int)random(-2, 2);
       newY = (int)random(-2, 2);
 
-    } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) || (newX < 0 ));
+    } while ((newX == -dir.x && newY == -dir.y) || (newX == 0 && newY == 0) );
     dir.x = newX;
     dir.y = newY;
   }

@@ -49,10 +49,13 @@ void setup() {
  
   rectMode(CENTER);
   rect(width/2,height/2, fieldW,fieldH);
-  for(int i = 0; i < 10; i++) traces.add(new Trace());
+  seed();
   draw_grid();
 }
 
+void seed(){
+  for(int i = 0; i < 20; i++) traces.add(new Trace());
+}
 
 boolean pause = true;
 
@@ -117,4 +120,6 @@ String random_out_of_list(String[] list){
 
 void keyPressed(){
   if(key == ' ') pause = !pause;
+  if(key == 'r') seed();
+  
 }
