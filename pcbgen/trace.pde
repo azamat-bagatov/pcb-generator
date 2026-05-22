@@ -27,7 +27,7 @@ class Trace {
   }
 
   void reset() {
-    weight = 4;
+    weight = random(2,6);;
        
     do {
       dir.x = (int)random(-1, 2);

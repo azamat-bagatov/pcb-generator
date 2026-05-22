@@ -1,5 +1,5 @@
 PFont pcbFont;
-boolean NO_INTERCECTIONS = false;
+boolean NO_INTERCECTIONS = true;
 //color BACKG = color(29);
 //color GOLD = color(228, 171, 41);
 color BACKG = color(0);
@@ -10,7 +10,7 @@ color GREEN = color(50, 254, 128);
 ArrayList <Trace> traces;
 
 int fieldW,fieldH;
-float GRID_STEP = 12;
+float GRID_STEP = 32;
 
 HashMap<String, Boolean> occupiedGrid = new HashMap<String, Boolean>();
 
@@ -28,7 +28,7 @@ void add_point(float x, float y) {
 
 boolean is_occupied(float x, float y, float dirx, float diry) {
   if(NO_INTERCECTIONS){
-    return false;
+    return occupiedGrid.containsKey(gridKey(x, y)) || ( occupiedGrid.containsKey(gridKey(x- dirx*GRID_STEP, y)) && occupiedGrid.containsKey(gridKey(x, y-diry*GRID_STEP)) );
   }
   else return occupiedGrid.containsKey(gridKey(x, y));
 }
